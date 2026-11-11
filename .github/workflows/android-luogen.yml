@@ -1,0 +1,85 @@
+name: android-luogen
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - "ui/**"
+      - "pkg/**"
+      - "internal/**"
+      - "bind/**"
+      - "go.mod"
+      - ".github/workflows/android-luogen.yml"
+
+env:
+  GO_VERSION: "1.25.4"
+  FLUTTER_VERSION: "3.41.6"
+  APK_KEY_PASSWORD: "luogen2026"
+  APK_STORE_PASSWORD: "luogen2026"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Build Go mobile library
+        env:
+          VERSION: "2.0.0-beta.4-luogen"
+        run: |
+          go install golang.org/x/mobile/cmd/gomobile@latest
+          go get golang.org/x/mobile/bind
+          gomobile init
+          gomobile bind -tags nosqlite \
+            -ldflags="-w -s -checklinkname=0 -X github.com/GopeedLab/gopeed/pkg/base.Version=$VERSION" \
+            -o ui/flutter/android/app/libs/libgopeed.aar \
+            -target=android -androidapi 21 -javapkg=com.gopeed \
+            github.com/GopeedLab/gopeed/bind/mobile
+
+      - name: Build APK
+        env:
+          VERSION: "2.0.0-beta.4-luogen"
+        run: |
+          cd ui/flutter
+          flutter build apk --release --dart-define="UPDATE_CHANNEL=androidApk"
+          mkdir -p dist
+          cp build/app/outputs/flutter-apk/app-release.apk dist/Gopeed-Luogen-v$VERSION.apk
+          ls -lh dist
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gopeed-luogen-apk
+          path: ui/flutter/dist/*.apk
+          retention-days: 30
+
+      - name: Publish release asset
+        if: github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: luogen-build-${{ github.run_number }}
+          name: Gopeed 罗根版 build ${{ github.run_number }}
+          body: |
+            自编译版本：解除 256 并发上限（最大同时下载数/HTTP连接数/HLS连接数上限改为 4096），
+            修复外部应用唤起时下载线程数为 0 导致失败的问题。
+          files: ui/flutter/dist/*.apk
