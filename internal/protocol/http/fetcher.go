@@ -296,6 +296,14 @@ type Fetcher struct {
 	// reported Completed.
 	checksumFailed atomic.Bool
 
+	// 多镜像分摊：把不同的 Range 连接分摊到不同的 GitHub 镜像上。
+	mirrorOnce     sync.Once
+	mirrorURLs     []string
+	mirrorCursor   atomic.Uint64
+	mirrorMu       sync.Mutex
+	mirrorFailures map[string]int
+	mirrorDead     map[string]struct{}
+
 	// Start pending mechanism
 	startPending   atomic.Bool
 	resolvedCh     chan struct{} // Signal when resolve completes
@@ -1323,6 +1331,71 @@ func (f *Fetcher) runConnection(conn *connection) {
 // downloadChunkOnce performs a single HTTP request for the current chunk without retrying.
 // If the redirect URL fails with an expiration-related error (401, 403, 410),
 // it will automatically retry with the original URL and update the redirect URL on success.
+// routeToMirror 选中一个可用镜像并把请求地址切过去，返回实际使用的镜像地址。
+// 镜像只在 GitHub 资源且配置了多个可用节点时生效，其他情况保持原始地址。
+func (f *Fetcher) routeToMirror(req *http.Request) string {
+	if f.ctl == nil || f.ctl.MirrorCandidates == nil || f.meta == nil || f.meta.Req == nil {
+		return ""
+	}
+	f.mirrorOnce.Do(func() {
+		f.mirrorURLs = f.ctl.MirrorCandidates(f.meta.Req.URL)
+	})
+	if len(f.mirrorURLs) < 2 {
+		return ""
+	}
+	// 带 If-Range 的请求依赖源站 ETag，跨镜像可能不匹配，保持走原地址。
+	f.connMu.Lock()
+	pinned := f.ifRange
+	f.connMu.Unlock()
+	if pinned != "" {
+		return ""
+	}
+	f.mirrorMu.Lock()
+	total := uint64(len(f.mirrorURLs))
+	var picked string
+	var pickedURL *url.URL
+	for i := uint64(0); i < total; i++ {
+		idx := (f.mirrorCursor.Add(1) - 1) % total
+		candidate := f.mirrorURLs[idx]
+		if _, dead := f.mirrorDead[candidate]; dead {
+			continue
+		}
+		parsed, err := url.Parse(candidate)
+		if err != nil || parsed.Host == "" {
+			continue
+		}
+		picked = candidate
+		pickedURL = parsed
+		break
+	}
+	f.mirrorMu.Unlock()
+	if pickedURL == nil {
+		return ""
+	}
+	req.URL = pickedURL
+	req.Host = ""
+	return picked
+}
+
+// noteMirrorFailure 记录镜像失败次数，连续出错就把它从轮转里剔除。
+func (f *Fetcher) noteMirrorFailure(mirrorURL string) {
+	if mirrorURL == "" {
+		return
+	}
+	f.mirrorMu.Lock()
+	defer f.mirrorMu.Unlock()
+	if f.mirrorFailures == nil {
+		f.mirrorFailures = make(map[string]int)
+	}
+	if f.mirrorDead == nil {
+		f.mirrorDead = make(map[string]struct{})
+	}
+	f.mirrorFailures[mirrorURL]++
+	if f.mirrorFailures[mirrorURL] >= 3 {
+		f.mirrorDead[mirrorURL] = struct{}{}
+	}
+}
+
 func (f *Fetcher) downloadChunkOnce(conn *connection, client *http.Client, buf []byte) error {
 	if conn.ctx.Err() != nil {
 		return conn.ctx.Err()
@@ -1380,16 +1453,22 @@ func (f *Fetcher) downloadChunkOnce(conn *connection, client *http.Client, buf [
 		}
 	}
 	rangeRequested := httpReq.Header.Get(base.HttpHeaderRange) != ""
+	var mirrorURL string
+	if rangeRequested {
+		mirrorURL = f.routeToMirror(httpReq)
+	}
 
 	// Record connection start time for adaptive timeout tracking
 	connStartTime := time.Now()
 
 	resp, err := client.Do(httpReq)
 	if err != nil {
+		f.noteMirrorFailure(mirrorURL)
 		return err
 	}
 
 	if resp.StatusCode != base.HttpCodeOK && resp.StatusCode != base.HttpCodePartialContent {
+		f.noteMirrorFailure(mirrorURL)
 		resp.Body.Close()
 		originalErr := NewRequestError(resp.StatusCode)
 

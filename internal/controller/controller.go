@@ -16,6 +16,9 @@ type Controller struct {
 	TempDir           string
 	GetConfig         func(v any)
 	GetProxy          func(requestProxy *base.RequestProxy) func(*http.Request) (*url.URL, error)
+	// MirrorCandidates 返回某个源地址可用的镜像列表（第一个为原始地址），
+	// 供 HTTP 分片下载把不同连接分摊到不同镜像上。返回 nil 表示不启用。
+	MirrorCandidates func(rawURL string) []string
 	// Logger is the downloader's core logger. It may be nil, in which case
 	// fetchers log nothing.
 	Logger *zerolog.Logger
