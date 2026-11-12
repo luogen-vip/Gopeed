@@ -363,6 +363,8 @@
   "applicationStorage": "應用程式儲存空間",
   "applicationStorageDescription": "穩定可用；解除安裝應用程式時其中的檔案會被刪除",
   "publicDownloadsDescription": "解除安裝後仍保留檔案；是否可用取決於 Android 裝置",
+  "cantOpenFile": "無法開啟這個檔案，可能是格式不支援",
+  "publicDownloads": "Download（公共下載資料夾）",
   "downloadsDirectoryUnavailable": "目前裝置不允許 Gopeed 寫入 Download/Gopeed",
   "enterValue": "請輸入內容",
   "trackers": "Tracker",

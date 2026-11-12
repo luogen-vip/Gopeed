@@ -397,6 +397,8 @@
   "applicationStorage": "App storage",
   "applicationStorageDescription": "Reliable app storage; files are removed when the app is uninstalled",
   "publicDownloadsDescription": "Keeps files after uninstall; availability depends on the Android device",
+  "cantOpenFile": "Unable to open this file",
+  "publicDownloads": "Download folder",
   "downloadsDirectoryUnavailable": "Gopeed cannot write to Download/Gopeed on this device",
   "enterValue": "Enter value",
   "trackers": "Trackers",

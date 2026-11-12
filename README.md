@@ -1,205 +1,78 @@
-# [![](_docs/img/banner.svg)](https://gopeed.com)
+# Gopeed 罗根版（Luogen Build）
 
-[![Test Status](https://github.com/GopeedLab/gopeed/workflows/test/badge.svg)](https://github.com/GopeedLab/gopeed/actions?query=workflow%3Atest)
-[![Codecov](https://codecov.io/gh/GopeedLab/gopeed/branch/main/graph/badge.svg)](https://codecov.io/gh/GopeedLab/gopeed)
-[![Release](https://img.shields.io/github/release/GopeedLab/gopeed.svg)](https://github.com/GopeedLab/gopeed/releases)
-[![Download](https://img.shields.io/github/downloads/GopeedLab/gopeed/total.svg)](https://github.com/GopeedLab/gopeed/releases)
-[![Donate](https://img.shields.io/badge/%24-donate-ff69b4.svg)](https://gopeed.com/docs/donate)
-[![WeChat](https://img.shields.io/badge/WeChat%20Official%20Account-07C160?logo=wechat&logoColor=white)](https://raw.githubusercontent.com/GopeedLab/gopeed/main/_docs/img/weixin.png)
-[![Discord](https://img.shields.io/discord/1037992631881449472?label=Discord&logo=discord&style=social)](https://discord.gg/ZUJqJrwCGB)
+> 基于开源下载器 [Gopeed](https://github.com/GopeedLab/gopeed) 深度定制的自用版本，由 **罗根（luogen-vip）** 维护。
+> 原版是 Go + Flutter 写的多协议下载器，这个版本在保留全部功能的前提下，把「并发上限、默认参数、界面风格」按手机端重度使用场景重做了一遍。
 
-<a href="https://trendshift.io/repositories/7953" target="_blank"><img src="https://trendshift.io/api/badge/repositories/7953" alt="GopeedLab%2Fgopeed | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+## 📦 下载
 
-[English](/README.md) | [中文](/README_zh-CN.md) | [日本語](/README_ja-JP.md) | [正體中文](/README_zh-TW.md) | [Tiếng Việt](/README_vi-VN.md)
+最新安装包在 [Releases](https://github.com/luogen-vip/Gopeed/releases) 页面，文件名形如 `Gopeed-Luogen-vX.Y.Z.apk`。
 
-## 🚀 Introduction
+- 包名 `com.luogen.gopeed`，和官方原版**互不冲突**，可以同时装在一台手机上。
+- 应用名显示为「Gopeed 罗根版」，便于区分。
+- 两版数据各自独立，卸载其中一个不影响另一个。
 
-Gopeed (short for **Go Speed**) is a fast, modern, free, and open-source download manager built with Go and Flutter. It supports HTTP, HTTPS, BitTorrent, magnet links, and ed2k on desktop, mobile, and the web.
+## ✨ 这个版本改了什么
 
-Beyond core download management, Gopeed offers browser integration, JavaScript extensions, a REST API, a CLI, and a self-hosted web UI for customization and automation.
+### 1. 并发全部放开
 
-Visit ✈ [Official Website](https://gopeed.com)
+| 项目 | 原版 | 本版 |
+| --- | --- | --- |
+| 新任务默认连接数 | 16 | **4096** |
+| 最大同时下载任务数 | 5 | 8（可调到 4096） |
+| HTTP 连接数上限 | 256 | **4096** |
+| HLS 分段连接数 | 8 | 64（上限 4096） |
+| FTP 连接数上限 | 32 | **4096** |
 
-![Application screenshot](_docs/img/ui-concept-en.webp)
+原版那个「256 上限」其实只是 UI 校验，Go 后端从来没限制过；这个版本把 UI 校验、默认值、后端默认值一起对齐了。
 
-## ✨ Features
+### 2. 默认更顺手
 
-- ⚡ **High-speed downloads** — combine concurrent tasks, multi-connection HTTP transfers, and peer-to-peer BitTorrent downloads to make the most of your bandwidth.
-- 🧲 **Multiple protocols** — download HTTP/HTTPS files, torrents, magnet links, and ed2k resources from a single app.
-- 🌱 **Full-featured BitTorrent** — use DHT peer discovery, uTP transport, Web Seeds, selective file downloads, tracker management, peer and piece statistics, and ratio- or time-based seeding limits.
-- 📋 **Flexible task management** — pause, resume, retry, run batch operations, search, filter by status, organize with categories, and recover tasks after a restart.
-- 🪶 **Lightweight native experience** — the main interface is rendered natively with Flutter. No Electron. No WebView shell. Enjoy a smaller footprint, lower overhead, and responsive performance.
-- 💻 **Cross-platform** — available for Windows, macOS, Linux, Android, iOS, and the web, with Docker and QNAP deployment options.
-- 🎨 **Customizable appearance** — follow your system theme or choose light or dark mode, with eight accent colors.
-- 📐 **Responsive interface** — task lists, navigation, settings, and detail views adapt to phones, tablets, and resizable desktop windows.
-- 🗣️ **Available in 20+ languages** — including English, Simplified and Traditional Chinese, Japanese, Korean, and many more.
-- 🌐 **Browser integration** — send downloads from Chrome, Edge, Firefox, and other compatible browsers directly to Gopeed.
-- 🧩 **JavaScript extensions** — add support for video platforms, AI model hubs, cloud storage services, and other download sources.
-- 🤖 **AI integration** — use Gopeed's MCP endpoint to connect compatible AI agents and create, inspect, or manage downloads with natural language.
-- 🔌 **Automation-ready** — integrate with Gopeed through its REST API, CLI, authenticated web UI, webhooks, and post-download scripts.
-- 🛠️ **Built-in essentials** — customize headers and the User-Agent, use proxies and GitHub mirrors, receive notifications, and extract archives automatically.
+- **直接下载（跳过解析并立即创建任务）默认开启**：粘贴链接 / 外部唤起 / 浏览器分享过来，直接开跑，不用再点一次。
+- **默认下载目录改为公共 `Download` 文件夹**：直接落在系统下载目录里，文件管理器、微信、QQ 都能直接看到；部分机型不允许写公共目录时会自动回退到 `Download/Gopeed`。
+- **已完成任务支持一键打开**：下载完成后，卡片上直接有「打开」按钮，APK 直接弹安装、视频直接播放、文档直接打开，不用再进详情页 → 文件页 → 点图标三步走。详情页和分享功能都保留。
 
-## 🤖 AI Integration
+### 3. 全新界面：冷雾蓝
 
-Connect Gopeed to an AI agent and manage downloads with natural language. For example, you can say:
+- 主色从原来的绿色换成 **天青蓝（Azure）**，浅色 `#1F6FEB` / 深色 `#6EA8FF`。
+- 中性色整套重写：冷灰蓝底 + 白色卡片，不再是偏暖的灰。
+- 圆角统一放大（控件 10、窗口 16），弹窗改成磨砂半透明，任务卡片加了柔和投影。
+- 应用图标重做：深蓝到天青的渐变 + 白色下载箭头，同时提供矢量自适应图标（`mipmap-anydpi-v26`），高分屏也不会糊。
 
-> Download the latest Gopeed client for Windows.
+### 4. 下载链路优化
 
-| Tool | Description |
-| --- | --- |
-| `resolve_task` | Resolve a download URL or URI and return its resource metadata and files before creating a task. |
-| `create_task` | Create and start a task from a resolved resource ID or a direct download request. |
-| `list_tasks` | List tasks, optionally filtering them by ID or status. |
-| `get_task` | Get the request, resource, options, and current progress for one task. |
-| `get_task_status` | Get lightweight runtime status and per-file progress for one task. |
-| `get_task_stats` | Get protocol-specific statistics, including HTTP connections or BitTorrent peers and seeding data. |
-| `pause_task` | Pause a task. |
-| `continue_task` | Continue a paused or failed task. |
-| `delete_task` | Delete a task, optionally deleting its downloaded files. |
+- GitHub 加速镜像默认启用并更新为可用节点：`jsdelivr`、`ghfast.top`、`gh-proxy.com`、`ghproxy.net`，国内拉 GitHub Release / raw 文件不再干等。
+- HTTP 客户端保留浏览器指纹模拟（TLS 指纹与主流浏览器一致），减少被源站风控拦下来的概率。
+- 快速失败重试策略保留：连接超时会自动按实测延迟收紧，避免一个慢节点拖死整个任务。
 
-## ⬇️ Download
+### 5. 修掉的问题
 
-### 🧪 Gopeed 2.0.0 Beta
+- 外部应用唤起（浏览器分享、其他 App 打开链接）时，下载线程数被识别成 0、链接识别不到的问题：现在会从整段分享文本里抠出 URL、补全协议头、去掉尾部标点，并且线程数为 0 时回落到默认值。
+- 主题色枚举新增分支导致设置页 switch 不穷尽（编译直接挂）的问题。
+- 中文提示文案重写：同时下载数、直接下载、链接校验、目录说明都改成更说人话的表述。
 
-Gopeed 2.0.0 is currently in public beta, introducing a redesigned interface, a native communication architecture that connects desktop and mobile clients directly to the Go core through FFI, a more consistent cross-platform experience, improved task management, more flexible API support, and MCP-based AI agent integration. Some features may still be incomplete or unstable, so please try it and report any issues you encounter.
+## ⚠️ 使用提醒
 
-- [Download Gopeed 2.0.0 Beta 3](https://github.com/GopeedLab/gopeed/releases/tag/v2.0.0-beta.3)
+- **4096 是上限，不是建议值**。每条连接会占用几十 KB 缓冲，4096 并发单任务大约要吃 200~300MB 内存；小文件（几百 KB）开这么多连接反而会因为建连开销变慢。日常建议 **64~256**，大文件、直链、GitHub 资源再往上加。
+- 两个版本同时安装时，浏览器打开下载链接会弹出「用哪个应用打开」，把「Gopeed 罗根版」设为默认即可。
+- 本版本只针对 Android 手机端打包，桌面端安装包请用官方原版。
 
-Once the features and stability meet our release standards, we will publish the official Gopeed 2.0.0 release. Beta users will be able to upgrade directly to the final release, while existing stable users will not be automatically moved onto the beta channel.
+## 🔧 自己编译
 
-### Stable release
+仓库自带 GitHub Actions 工作流 `.github/workflows/android-luogen.yml`：
 
-- [Official Download](https://gopeed.com)
-- [GitHub Releases](https://github.com/GopeedLab/gopeed/releases/latest)
+1. 触发方式：push 到 `main` 或手动 `Run workflow`。
+2. 环境：Go 1.25.4、Flutter 3.41.6、JDK 17、NDK。
+3. 流程：`gomobile bind` 生成 `libgopeed.aar` → `flutter build apk --release` → 上传 artifact `gopeed-luogen-apk`。
+4. 签名：仓库内 `ui/flutter/android/app/upload-keystore.jks`（alias `upload`），密码通过 workflow 环境变量注入。
 
-### 🛠️ Command-line tool
+本地编译请参考原版文档：<https://gopeed.com/docs/development>
 
-Install the CLI with `go install`:
+## 📄 许可
 
-```bash
-go install github.com/GopeedLab/gopeed/cmd/gopeed@latest
-```
+本项目沿用上游 **GPL-3.0** 许可，见 [LICENSE](LICENSE)。
+所有原始代码版权归 [GopeedLab](https://github.com/GopeedLab/gopeed) 及其贡献者所有，本仓库仅包含针对个人使用场景的修改。
 
-## 🔌 Browser Extension
+## 🙏 致谢
 
-Use the Gopeed browser extension to send downloads from Chrome, Edge, Firefox, and other compatible browsers directly to Gopeed: [GopeedLab/browser-extension](https://github.com/GopeedLab/browser-extension)
-
-## 📱 WeChat Official Account
-
-Follow Gopeed's official WeChat account for updates and news.
-
-<img src="_docs/img/weixin.png" width="200" />
-
-## 💝 Donate
-
-If Gopeed is useful to you, please consider [supporting its development](https://gopeed.com/docs/donate). Thank you!
-
-## 👨‍💻 Development
-
-Gopeed consists of a Flutter front end and a Go back end. They communicate over HTTP, using Unix sockets on Unix-like systems and TCP on Windows.
-
-> The front-end source is located in the `ui/flutter` directory.
-
-### 🌍 Environment
-
-1. Go 1.25+
-2. Flutter 3.41+
-
-### 📋 Clone
-
-```bash
-git clone git@github.com:GopeedLab/gopeed.git
-```
-
-### 🤝 Contributing
-
-See [CONTRIBUTING.md](/CONTRIBUTING.md).
-
-### 🏗️ Build
-
-#### Desktop
-
-Set up Flutter desktop development using the official [Flutter desktop guide](https://docs.flutter.dev/development/platform-integration/desktop), and make sure a working C toolchain is available for cgo. Then run the commands for your platform.
-
-Commands:
-
-- Windows
-
-```bash
-go build -tags nosqlite -ldflags="-w -s" -buildmode=c-shared -o ui/flutter/windows/libgopeed.dll github.com/GopeedLab/gopeed/bind/desktop
-cd ui/flutter
-flutter build windows
-```
-
-- macOS
-
-```bash
-go build -tags nosqlite -ldflags="-w -s" -buildmode=c-shared -o ui/flutter/macos/Frameworks/libgopeed.dylib github.com/GopeedLab/gopeed/bind/desktop
-cd ui/flutter
-flutter build macos
-```
-
-- Linux
-
-```bash
-go build -tags nosqlite -ldflags="-w -s" -buildmode=c-shared -o ui/flutter/linux/bundle/lib/libgopeed.so github.com/GopeedLab/gopeed/bind/desktop
-cd ui/flutter
-flutter build linux
-```
-
-#### Mobile
-
-Mobile builds also require a working cgo toolchain. Install and initialize `gomobile`:
-
-```bash
-go install golang.org/x/mobile/cmd/gomobile@latest
-go get golang.org/x/mobile/bind
-gomobile init
-```
-
-Commands:
-
-- Android
-
-```bash
-gomobile bind -tags nosqlite -ldflags="-w -s -checklinkname=0" -o ui/flutter/android/app/libs/libgopeed.aar -target=android -androidapi 21 -javapkg="com.gopeed" github.com/GopeedLab/gopeed/bind/mobile
-cd ui/flutter
-flutter build apk
-```
-
-- iOS
-
-```bash
-gomobile bind -tags nosqlite -ldflags="-w -s" -o ui/flutter/ios/Frameworks/Libgopeed.xcframework -target=ios github.com/GopeedLab/gopeed/bind/mobile
-cd ui/flutter
-flutter build ios --no-codesign
-```
-
-#### Web
-
-Build the web app and server:
-
-```bash
-cd ui/flutter
-flutter build web
-cd ../../
-rm -rf cmd/web/dist
-cp -r ui/flutter/build/web cmd/web/dist
-go build -tags nosqlite,web -ldflags="-s -w" -o bin/ github.com/GopeedLab/gopeed/cmd/web
-```
-
-## ❤️ Credits
-
-### 👥 Contributors
-
-<a href="https://github.com/GopeedLab/gopeed/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=GopeedLab/gopeed" />
-</a>
-
-### 🏢 JetBrains
-
-[![goland](_docs/img/goland.svg)](https://www.jetbrains.com/?from=gopeed)
-
-## 📄 License
-
-[GPLv3](LICENSE)
+- [GopeedLab/gopeed](https://github.com/GopeedLab/gopeed) —— 上游项目
+- 所有上游贡献者

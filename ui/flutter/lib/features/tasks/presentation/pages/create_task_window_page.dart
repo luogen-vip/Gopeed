@@ -59,7 +59,7 @@ class _CreateTaskWindowPageState extends ConsumerState<CreateTaskWindowPage> {
   final _urlController = TextEditingController();
   final _renameController = TextEditingController();
   final _connectionsController = TextEditingController(text: '$_defaultConnectionsFallback');
-  static const int _defaultConnectionsFallback = 480;
+  static const int _defaultConnectionsFallback = 4096;
   int _defaultConnections = _defaultConnectionsFallback;
   final _directoryController = TextEditingController();
   final _proxyServerController = TextEditingController();

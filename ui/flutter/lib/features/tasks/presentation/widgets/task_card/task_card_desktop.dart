@@ -3,7 +3,10 @@ import 'package:flutter/material.dart' show Colors, Icons;
 import 'package:flutter/widgets.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart' as shad;
 
+import '../../../../../core/utils/file_explorer.dart';
 import '../../../../../core/window/app_window_chrome.dart';
+import '../../../../../l10n/l10n.dart';
+import '../../../../../shared/widgets/app_toast.dart';
 import '../../../../../shared/theme/app_design_tokens.dart';
 import '../../../../../shared/theme/app_palette.dart';
 import '../../../domain/task_record.dart';
@@ -305,7 +308,7 @@ class _CompletedContent extends StatelessWidget {
               ),
               const SizedBox(width: 16),
               if (listeningForUpdate) ...[const TaskUpdateListeningIndicator(), const SizedBox(width: 8)],
-              Row(mainAxisSize: MainAxisSize.min, children: _buildActionButtons(task, palette, isDark)),
+              Row(mainAxisSize: MainAxisSize.min, children: _buildActionButtons(context, task, palette, isDark)),
             ],
           ),
         ),
@@ -315,12 +318,20 @@ class _CompletedContent extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildActionButtons(TaskRecord task, AppPalette palette, bool isDark) {
+  Future<void> _openTaskFile(BuildContext context, TaskRecord task) async {
+    final opened = await FileExplorer.open(task.storagePath);
+    if (!opened && context.mounted) {
+      showAppToast(context, context.l10n.cantOpenFile, type: AppToastType.error);
+    }
+  }
+
+  List<Widget> _buildActionButtons(BuildContext context, TaskRecord task, AppPalette palette, bool isDark) {
     final actions = switch (task.status) {
       TaskStatus.downloading => [(Icons.pause, null), (Icons.close, onDelete)],
       TaskStatus.paused => [(Icons.play_arrow, null), (Icons.close, onDelete)],
       TaskStatus.failed => [(Icons.refresh, null), (Icons.delete_outline, onDelete)],
       TaskStatus.completed => [
+        if (!task.isGroup) (Icons.open_in_new, () => _openTaskFile(context, task)),
         if (AppWindowChrome.isDesktopWindow) (Icons.folder_open_outlined, onReveal),
         (Icons.delete_outline, onDelete),
       ],

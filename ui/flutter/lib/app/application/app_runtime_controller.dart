@@ -23,6 +23,8 @@ import '../rpc/webview_rpc_service.dart';
 import 'android_foreground_service.dart';
 import 'location_keep_alive.dart';
 import 'continued_processing.dart';
+import 'download_directory_default_stub.dart'
+    if (dart.library.io) 'download_directory_default_io.dart';
 
 const unixSocketPath = 'gopeed.sock';
 
@@ -289,6 +291,10 @@ class AppRuntimeController extends AsyncNotifier<AppRuntimeState> {
       return (await getDownloadsDirectory())?.path ?? '';
     }
     if (Util.isAndroid()) {
+      final publicDir = await androidDefaultDownloadDir();
+      if (publicDir != null && publicDir.isNotEmpty) {
+        return publicDir;
+      }
       return (await getExternalStorageDirectory())?.path ?? (await getApplicationDocumentsDirectory()).path;
     }
     if (Util.isIOS()) {

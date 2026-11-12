@@ -21,9 +21,9 @@ type Config struct {
 func DefaultConfig() *Config {
 	return &Config{Enabled: true, Mirrors: []Mirror{
 		{Type: "jsdelivr", URL: "https://fastly.jsdelivr.net/gh", IsBuiltIn: true},
-		{Type: "ghProxy", URL: "https://fastgit.cc", IsBuiltIn: true},
-		{Type: "ghProxy", URL: "https://gh-proxy.com", IsBuiltIn: true},
 		{Type: "ghProxy", URL: "https://ghfast.top", IsBuiltIn: true},
+		{Type: "ghProxy", URL: "https://gh-proxy.com", IsBuiltIn: true},
+		{Type: "ghProxy", URL: "https://ghproxy.net", IsBuiltIn: true},
 	}}
 }
 func (c *Config) Validate() error {

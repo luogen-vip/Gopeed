@@ -75,7 +75,9 @@ Future<bool> initDownloaderConfig(
   if (config.githubMirror.mirrors.isEmpty) {
     config.githubMirror.mirrors = [
       GithubMirror(type: GithubMirrorType.jsdelivr, url: 'https://fastly.jsdelivr.net/gh', isBuiltIn: true),
-      GithubMirror(type: GithubMirrorType.ghProxy, url: 'https://fastgit.cc', isBuiltIn: true),
+      GithubMirror(type: GithubMirrorType.ghProxy, url: 'https://ghfast.top', isBuiltIn: true),
+      GithubMirror(type: GithubMirrorType.ghProxy, url: 'https://gh-proxy.com', isBuiltIn: true),
+      GithubMirror(type: GithubMirrorType.ghProxy, url: 'https://ghproxy.net', isBuiltIn: true),
     ];
   }
   return changed;

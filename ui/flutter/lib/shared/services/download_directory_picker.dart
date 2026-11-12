@@ -85,7 +85,15 @@ class DownloadDirectoryPicker {
               errorMessage = null;
             });
             try {
-              final verifiedPath = await _prepareDownloads(downloadsPath);
+              String verifiedPath = '';
+              try {
+                verifiedPath = await _prepareDownloads(downloadsPath);
+              } catch (_) {
+                final fallbackPath = locations['downloadsFallback'];
+                if (fallbackPath != null && fallbackPath.isNotEmpty) {
+                  verifiedPath = await _prepareDownloads(fallbackPath);
+                }
+              }
               if (dialogContext.mounted && verifiedPath.isNotEmpty) {
                 shad.closeOverlay(dialogContext, verifiedPath);
               }
@@ -119,7 +127,7 @@ class DownloadDirectoryPicker {
                   _DirectoryOption(
                     key: const ValueKey('android-downloads-directory-option'),
                     icon: Icons.download_outlined,
-                    title: 'Download/Gopeed',
+                    title: dialogContext.l10n.publicDownloads,
                     description: dialogContext.l10n.publicDownloadsDescription,
                     selected: currentPath == downloadsPath,
                     loading: checkingDownloads,
@@ -154,7 +162,11 @@ class DownloadDirectoryPicker {
     final applicationDirectory = await getExternalStorageDirectory() ?? await getApplicationDocumentsDirectory();
     final downloadsDirectory = await ExternalPath.getExternalStoragePublicDirectory(ExternalPath.DIRECTORY_DOWNLOAD);
     if (downloadsDirectory.isEmpty) return null;
-    return {'application': applicationDirectory.path, 'downloads': path.join(downloadsDirectory, 'Gopeed')};
+    return {
+      'application': applicationDirectory.path,
+      'downloads': downloadsDirectory,
+      'downloadsFallback': path.join(downloadsDirectory, 'Gopeed'),
+    };
   }
 
   static Future<String> _prepareDownloads(String downloadsPath) async {

@@ -75,7 +75,7 @@ func (fm *FetcherManager) DefaultConfig() any {
 	return &config{
 		UserAgent:   DefaultUserAgent,
 		// 默认连接数拉到 480：单线程常被限速，多连接才能跑满带宽。
-		Connections: 480,
+		Connections: 4096,
 	}
 }
 
