@@ -20,7 +20,6 @@ import (
 
 	internalblob "github.com/GopeedLab/gopeed/internal/blob"
 	"github.com/GopeedLab/gopeed/internal/controller"
-	"github.com/GopeedLab/gopeed/internal/githubmirror"
 	"github.com/GopeedLab/gopeed/internal/fetcher"
 	"github.com/GopeedLab/gopeed/internal/logger"
 	"github.com/GopeedLab/gopeed/internal/tempfiles"
@@ -489,18 +488,6 @@ func (d *Downloader) setupFetcher(fm fetcher.FetcherManager, fetcher fetcher.Fet
 	ctl.ManagedProduction = func(raw string) bool { return d.blob.Production(raw) != nil }
 	ctl.GetConfig = func(v any) {
 		d.getProtocolConfig(fm.Name(), v)
-	}
-	// GitHub 资源启用镜像时，把可用镜像交给 HTTP 分片下载，让不同连接分摊到不同镜像。
-	ctl.MirrorCandidates = func(raw string) []string {
-		cfg, err := d.GetConfig()
-		if err != nil || cfg == nil || cfg.GithubMirror == nil {
-			return nil
-		}
-		urls := githubmirror.Candidates(cfg.GithubMirror, raw, githubmirror.Resource)
-		if len(urls) < 2 {
-			return nil
-		}
-		return urls
 	}
 	if d.Logger != nil {
 		ctl.Logger = &d.Logger.Logger
