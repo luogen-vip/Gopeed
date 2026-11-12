@@ -1,6 +1,13 @@
 import 'package:flutter/widgets.dart';
 
 enum AppThemeColor {
+  azure(
+    key: 'azure',
+    light: Color(0xFF1F6FEB),
+    dark: Color(0xFF6EA8FF),
+    lightForeground: Color(0xFFFFFFFF),
+    darkForeground: Color(0xFF06152E),
+  ),
   green(
     key: 'green',
     light: Color(0xFF79C476),
@@ -73,7 +80,7 @@ enum AppThemeColor {
   final Color darkForeground;
 
   static AppThemeColor fromKey(String? key) {
-    return values.where((color) => color.key == key).firstOrNull ?? AppThemeColor.green;
+    return values.where((color) => color.key == key).firstOrNull ?? AppThemeColor.azure;
   }
 }
 

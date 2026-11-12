@@ -2274,7 +2274,7 @@ class _ErrorState extends StatelessWidget {
 
 /// The highest number of parallel FTP logins offered, the same limit as on the create task page. FTP servers
 /// usually allow only a few logins per user.
-const _ftpMaxConnections = 32;
+const _ftpMaxConnections = 4096;
 
 /// Raised from the upstream 256. Still bounded, but far beyond what a phone
 /// can saturate, so the UI no longer silently truncates a large value.

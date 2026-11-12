@@ -72,10 +72,10 @@ class AppTheme {
         },
       ),
       typography: _typography(),
-      radius: 0.5,
+      radius: 0.8,
       scaling: 1,
-      surfaceBlur: 0,
-      surfaceOpacity: 1,
+      surfaceBlur: 14,
+      surfaceOpacity: 0.94,
       platform: defaultTargetPlatform,
     );
   }

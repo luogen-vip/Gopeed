@@ -220,10 +220,10 @@ class ExtraConfig {
 
   ExtraConfig({
     this.themeMode = '',
-    this.themeColor = 'green',
+    this.themeColor = 'azure',
     this.locale = '',
     this.lastDeleteTaskKeep = true,
-    this.defaultDirectDownload = false,
+    this.defaultDirectDownload = true,
     this.defaultBtClient = true,
     this.notifyWhenNewVersion = true,
     this.desktopNotification = true,

@@ -1,7 +1,7 @@
 package hls
 
 const (
-	defaultSegmentConnections = 8
+	defaultSegmentConnections = 64
 	defaultMaxRetries         = 5
 	defaultTimeoutSeconds     = 30
 

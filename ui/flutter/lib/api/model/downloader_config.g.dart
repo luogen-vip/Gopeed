@@ -184,10 +184,10 @@ Map<String, dynamic> _$Ed2kConfigToJson(Ed2kConfig instance) => <String, dynamic
 
 ExtraConfig _$ExtraConfigFromJson(Map<String, dynamic> json) => ExtraConfig(
   themeMode: json['themeMode'] as String? ?? '',
-  themeColor: json['themeColor'] as String? ?? 'green',
+  themeColor: json['themeColor'] as String? ?? 'azure',
   locale: json['locale'] as String? ?? '',
   lastDeleteTaskKeep: json['lastDeleteTaskKeep'] as bool? ?? true,
-  defaultDirectDownload: json['defaultDirectDownload'] as bool? ?? false,
+  defaultDirectDownload: json['defaultDirectDownload'] as bool? ?? true,
   defaultBtClient: json['defaultBtClient'] as bool? ?? true,
   notifyWhenNewVersion: json['notifyWhenNewVersion'] as bool? ?? true,
   desktopNotification: json['desktopNotification'] as bool? ?? true,

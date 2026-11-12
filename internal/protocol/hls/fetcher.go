@@ -896,7 +896,7 @@ func (f *Fetcher) prefetchSize(segments []*Segment) {
 		return
 	}
 
-	workerCount := min(f.config.SegmentConnections, 8)
+	workerCount := min(f.config.SegmentConnections, 64)
 	var failed atomic.Bool
 	queue := make(chan *Segment)
 	var wg sync.WaitGroup

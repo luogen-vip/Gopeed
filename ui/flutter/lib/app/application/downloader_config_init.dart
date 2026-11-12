@@ -50,7 +50,7 @@ Future<bool> initDownloaderConfig(
     extra.themeMode = 'system';
   }
   if (extra.themeColor.isEmpty) {
-    extra.themeColor = 'green';
+    extra.themeColor = 'azure';
   }
   if (config.proxy.scheme.isEmpty) {
     config.proxy.scheme = 'http';

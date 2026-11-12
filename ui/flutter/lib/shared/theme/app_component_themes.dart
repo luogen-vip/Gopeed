@@ -59,7 +59,7 @@ class AppComponentThemes extends StatelessWidget {
               borderColor: theme.brightness == Brightness.dark ? palette.textMuted : palette.border,
             ),
             child: shad.ComponentTheme<shad.ToastTheme>(
-              data: const shad.ToastTheme(toastConstraints: BoxConstraints(maxWidth: 420)),
+              data: const shad.ToastTheme(toastConstraints: BoxConstraints(maxWidth: 460)),
               child: child,
             ),
           ),

@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
     <application
-        android:label="Gopeed"
+        android:label="Gopeed 罗根版"
         android:name="${applicationName}"
         android:requestLegacyExternalStorage="true"
         android:extractNativeLibs="true"

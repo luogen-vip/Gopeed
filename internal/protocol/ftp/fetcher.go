@@ -30,7 +30,7 @@ import (
 
 const (
 	// Many servers cap logins per user, so FTP starts lower than HTTP.
-	defaultConnections = 4
+	defaultConnections = 16
 	maxConnections     = 256
 	minSegmentSize     = 1 << 20
 	maxRetries         = 5

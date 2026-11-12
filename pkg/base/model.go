@@ -235,7 +235,7 @@ type DownloaderStoreConfig struct {
 
 func (cfg *DownloaderStoreConfig) Init() *DownloaderStoreConfig {
 	if cfg.MaxRunning == 0 {
-		cfg.MaxRunning = 5
+		cfg.MaxRunning = 8
 	}
 	if cfg.ProtocolConfig == nil {
 		cfg.ProtocolConfig = make(map[string]any)

@@ -5,13 +5,13 @@ class AppDesignTokens {
 
   static const Size childWindowSize = Size(820, 620);
   static const double windowHeaderHeight = 30;
-  static const double windowRadius = 12;
+  static const double windowRadius = 16;
   // Leave room for native macOS traffic lights while keeping rail widths consistent across platforms.
   static const double railWidth = 78;
   static const double filterSidebarWidth = 192;
   static const double contentHeaderHeight = 48;
-  static const double taskRowHeight = 72;
-  static const double controlRadius = 4;
+  static const double taskRowHeight = 76;
+  static const double controlRadius = 10;
   static const double dialogActionMinWidth = 100;
   static const double checkboxSize = 18;
   static const double checkboxLabelGap = 10;

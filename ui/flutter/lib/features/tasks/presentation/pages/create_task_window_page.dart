@@ -59,7 +59,7 @@ class _CreateTaskWindowPageState extends ConsumerState<CreateTaskWindowPage> {
   final _urlController = TextEditingController();
   final _renameController = TextEditingController();
   final _connectionsController = TextEditingController(text: '$_defaultConnectionsFallback');
-  static const int _defaultConnectionsFallback = 16;
+  static const int _defaultConnectionsFallback = 480;
   int _defaultConnections = _defaultConnectionsFallback;
   final _directoryController = TextEditingController();
   final _proxyServerController = TextEditingController();
@@ -92,7 +92,7 @@ class _CreateTaskWindowPageState extends ConsumerState<CreateTaskWindowPage> {
 
   bool _showAdvanced = false;
   int _advancedScrollRequest = 0;
-  bool _directDownload = false;
+  bool _directDownload = true;
   int _protocolTab = 0;
   bool _creating = false;
   final Map<String, int> _completedSubmissionCounts = {};
@@ -2011,7 +2011,7 @@ const _advancedScrollDistance = 112.0;
 
 /// The highest number of parallel logins offered for FTP links. FTP servers
 /// usually allow only a few logins per user.
-const _ftpMaxConnections = 32;
+const _ftpMaxConnections = 4096;
 
 /// Upper bound for HTTP connections per task (upstream UI capped this at 256).
 const _maxConnections = 4096;

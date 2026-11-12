@@ -92,8 +92,10 @@ class _TaskCardDesktopState extends State<TaskCardDesktop> {
           decoration: BoxDecoration(
             borderRadius: radius,
             boxShadow: widget.selected
-                ? [BoxShadow(color: palette.taskCardSelectedBorder, blurRadius: 0, spreadRadius: 1)]
-                : null,
+                ? [BoxShadow(color: palette.taskCardSelectedBorder, blurRadius: 0, spreadRadius: 1),
+                BoxShadow(color: palette.brandSoft, blurRadius: 12, offset: const Offset(0, 3)),
+              ]
+                : [BoxShadow(color: palette.brandSoft, blurRadius: 12, offset: const Offset(0, 3))],
           ),
           child: ClipRRect(
             borderRadius: radius,

@@ -19,7 +19,7 @@ enum AppThemeMode {
 }
 
 class AppAppearanceState {
-  const AppAppearanceState({this.themeMode = AppThemeMode.system, this.themeColor = AppThemeColor.green});
+  const AppAppearanceState({this.themeMode = AppThemeMode.system, this.themeColor = AppThemeColor.azure});
 
   final AppThemeMode themeMode;
   final AppThemeColor themeColor;
