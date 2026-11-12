@@ -96,6 +96,10 @@ class ExtensionIcon extends StatelessWidget {
         width: size,
         height: size,
         fit: BoxFit.cover,
+        frameBuilder: (_, child, frame, wasSynchronouslyLoaded) {
+          if (wasSynchronouslyLoaded || frame != null) return child;
+          return fallback;
+        },
         errorBuilder: (_, _, _) => fallback,
       ),
     };

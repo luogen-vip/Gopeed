@@ -4,16 +4,18 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- 下载箭头（几何贝塞尔轮廓） -->
+    <!-- 进度环（300° 圆弧，青蓝色） -->
+    <path
+        android:strokeColor="#59E1FF"
+        android:strokeWidth="4.6"
+        android:fillColor="#00000000"
+        android:pathData="M34.27,46.82 A21,21 0 1 1 37.91,67.50" />
+    <!-- 中心下载箭头 -->
     <path
         android:fillColor="#FFFFFF"
-        android:pathData="M50.4,32 C50.4,30.8 51.4,29.8 52.6,29.8 L55.4,29.8 C56.6,29.8 57.6,30.8 57.6,32 L57.6,55 C57.6,55.6 58,56 58.6,56 L64.6,56 C65.9,56 66.5,57.6 65.6,58.5 L55.6,68.2 C54.9,68.9 53.7,68.9 53,68.2 L43,58.5 C42.1,57.6 42.7,56 44,56 L50,56 C50.6,56 50.4,55.6 50.4,55 L50.4,32 Z" />
-    <!-- 底部托盘（圆头描边） -->
+        android:pathData="M49.6,37 L58.4,37 L58.4,55 L65.5,55 L54,68 L42.5,55 L49.6,55 Z" />
+    <!-- 底部高光 -->
     <path
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="5"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round"
         android:fillColor="#00000000"
-        android:pathData="M38,77 C45,77 63,77 70,77" />
+        android:pathData="M0,0" />
 </vector>

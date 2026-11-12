@@ -9,7 +9,10 @@ Future<bool> open(String filePath) async {
     if (!await FileSystemEntity.isFile(filePath) && !await FileSystemEntity.isDirectory(filePath)) {
       return false;
     }
-    final result = await OpenFilex.open(filePath);
+    final isApk = filePath.toLowerCase().endsWith('.apk');
+    final result = isApk
+        ? await OpenFilex.open(filePath, type: 'application/vnd.android.package-archive')
+        : await OpenFilex.open(filePath);
     return result.type == ResultType.done;
   } catch (_) {
     return false;

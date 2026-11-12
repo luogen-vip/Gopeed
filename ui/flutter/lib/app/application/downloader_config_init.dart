@@ -55,13 +55,27 @@ Future<bool> initDownloaderConfig(
   if (config.proxy.scheme.isEmpty) {
     config.proxy.scheme = 'http';
   }
+  final preferredDownloadDir = await defaultDownloadDir();
   if (config.downloadDir.isEmpty) {
-    final downloadDir = await defaultDownloadDir();
     // An unknown directory stays empty, the backend resolves its own.
-    if (downloadDir.isNotEmpty) {
-      config.downloadDir = downloadDir;
+    if (preferredDownloadDir.isNotEmpty) {
+      config.downloadDir = preferredDownloadDir;
       changed = true;
     }
+  } else if (preferredDownloadDir.isNotEmpty &&
+      preferredDownloadDir != config.downloadDir &&
+      _isLegacyAppStorageDir(config.downloadDir) &&
+      !_isLegacyAppStorageDir(preferredDownloadDir)) {
+    // 老版本默认落在应用私有存储，升级后统一搬到公共 Download 目录。
+    final oldDir = config.downloadDir;
+    config.downloadDir = preferredDownloadDir;
+    for (final category in config.categories) {
+      final categoryPath = category.path;
+      if (categoryPath == oldDir || categoryPath.startsWith('$oldDir/')) {
+        category.path = categoryPath.replaceFirst(oldDir, preferredDownloadDir);
+      }
+    }
+    changed = true;
   }
   if (config.categories.isEmpty && config.downloadDir.isNotEmpty) {
     config.categories = [
@@ -91,4 +105,11 @@ DownloadCategory _builtinCategory(String nameKey, String categoryPath) {
     nameKey: nameKey,
     extensions: List<String>.from(kDefaultCategoryExtensions[nameKey] ?? const []),
   );
+}
+
+/// 应用私有外部存储默认目录，形如 /storage/emulated/0/Android/data/<包名>/files。
+bool _isLegacyAppStorageDir(String dir) {
+  final normalized = dir.replaceAll('\\', '/');
+  return normalized.contains('/Android/data/') &&
+      (normalized.endsWith('/files') || normalized.endsWith('/files/'));
 }

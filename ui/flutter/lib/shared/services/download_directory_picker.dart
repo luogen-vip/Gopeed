@@ -177,6 +177,11 @@ class DownloadDirectoryPicker {
       var permission = await Permission.storage.status;
       if (!permission.isGranted) permission = await Permission.storage.request();
       if (!permission.isGranted) throw StateError('Storage permission was denied');
+    } else {
+      final manageStatus = await Permission.manageExternalStorage.status;
+      if (!manageStatus.isGranted) {
+        await Permission.manageExternalStorage.request();
+      }
     }
     await verifyDownloadDirectoryWritable(downloadsPath);
     return downloadsPath;
