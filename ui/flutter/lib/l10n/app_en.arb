@@ -351,6 +351,7 @@
   "checkForUpdates": "Check for Updates",
   "updating": "Updating…",
   "colorGreen": "Green",
+  "colorAzure": "Azure",
   "colorRed": "Red",
   "colorRose": "Rose",
   "colorOrange": "Orange",

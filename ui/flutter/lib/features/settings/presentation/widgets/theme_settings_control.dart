@@ -118,6 +118,7 @@ class ThemeColorSelector extends StatelessWidget {
 }
 
 String _colorLabel(BuildContext context, AppThemeColor color) => switch (color) {
+  AppThemeColor.azure => context.l10n.colorAzure,
   AppThemeColor.green => context.l10n.colorGreen,
   AppThemeColor.red => context.l10n.colorRed,
   AppThemeColor.rose => context.l10n.colorRose,

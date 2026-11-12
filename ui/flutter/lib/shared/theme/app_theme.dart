@@ -32,11 +32,11 @@ class AppTheme {
     );
   }
 
-  static shad.ThemeData light([AppThemeColor themeColor = AppThemeColor.green]) {
+  static shad.ThemeData light([AppThemeColor themeColor = AppThemeColor.azure]) {
     return _buildTheme(palette: AppPalette.lightFor(themeColor), brightness: Brightness.light);
   }
 
-  static shad.ThemeData dark([AppThemeColor themeColor = AppThemeColor.green]) {
+  static shad.ThemeData dark([AppThemeColor themeColor = AppThemeColor.azure]) {
     return _buildTheme(palette: AppPalette.darkFor(themeColor), brightness: Brightness.dark);
   }
 
@@ -86,11 +86,11 @@ class AppTheme {
     inlineCode: material.TextStyle(fontFamily: 'monospace', fontSize: 14, fontWeight: material.FontWeight.w600),
   );
 
-  static material.ThemeData materialLight([AppThemeColor themeColor = AppThemeColor.green]) {
+  static material.ThemeData materialLight([AppThemeColor themeColor = AppThemeColor.azure]) {
     return _buildMaterialTheme(palette: AppPalette.lightFor(themeColor), brightness: Brightness.light);
   }
 
-  static material.ThemeData materialDark([AppThemeColor themeColor = AppThemeColor.green]) {
+  static material.ThemeData materialDark([AppThemeColor themeColor = AppThemeColor.azure]) {
     return _buildMaterialTheme(palette: AppPalette.darkFor(themeColor), brightness: Brightness.dark);
   }
 
